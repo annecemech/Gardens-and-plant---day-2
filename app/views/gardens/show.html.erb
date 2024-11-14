@@ -8,10 +8,20 @@
   <div class="row mt-5">
     <% @garden.plants.each do |plant| %>
       <div class="col-4">
-        <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= plant.image_url %>')">
-          <%= plant.name %>
+        <div class="card-category mb-2" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= plant.image_url %>')">
+          <div><%= plant.name %></div>
           <%= link_to "+", plant_path(plant), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "card-remove-link" %>
+          <div class="chore">
+            <% completion = plant.completions.last %>
+            <span class="badge bg-success">
+              <%= plant.chores.last.name %> done on <%= plant.chores.last.created_at.strftime("%d %b. %Y") %>
+              <%= link_to completion_path(completion), data: { turbo_method: :delete, turbo_confirm: "Are you sure ?" } do %>
+                <i class="fa-regular fa-square-minus"></i>
+              <% end %>
+            </span>
+          </div>
         </div>
+        <%= link_to "Ajouter une tâche réalisée", new_plant_completion_path(plant), class: "btn btn-primary"  %>
       </div>
     <% end %>
   </div>
